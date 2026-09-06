@@ -220,26 +220,38 @@ Malformed request	Invalid JSON	400	Return a clear client error
 Validation error	Missing customer ID or invalid quantity	400	Explain what must be corrected
 Missing resource	Product does not exist	404	Tell the client the resource was not found
 Unexpected failure	Database or runtime failure	500	Log details internally and return a safe message
-Recommended Practices
-Catch specific exceptions before broad exceptions.
-Avoid using except Exception as the only error-handling mechanism.
-Log stack traces for unexpected failures.
-Do not return stack traces, secrets, or internal infrastructure details to clients.
-Use consistent response formats across all code paths.
-Make errors observable through logs and monitoring alerts.
-Keep business logic separate from the function handler when possible.
-Use retries only for transient failures and make operations idempotent before enabling retries.
-Local Setup
+
+
+**Recommended Practices**
+
+* Catch specific exceptions before broad exceptions.
+* Avoid using except Exception as the only error-handling mechanism.
+* Log stack traces for unexpected failures.
+* Do not return stack traces, secrets, or internal infrastructure details to clients.
+* Use consistent response formats across all code paths.
+* Make errors observable through logs and monitoring alerts.
+* Keep business logic separate from the function handler when possible.
+* Use retries only for transient failures and make operations idempotent before enabling retries.
+
+
+**Local Setup**
+
 Requirements
-Python 3.10 or later
-pip
-Install Dependencies
+
+* Python 3.10 or later
+* pip
+
+**Install Dependencies**
+
 This example uses only the Python standard library, so no third-party packages are required. If you add dependencies, list them in requirements.txt and install them with:
 
-
+```python
 pip install -r requirements.txt
-Run Locally
+```
 
+**Run Locally**
+
+```python
 python - <<'PY'
 import json
 from app import lambda_handler
@@ -256,6 +268,8 @@ request = {
 
 print(lambda_handler(request, None))
 PY
+```
+
 Testing
 A simple test suite can verify both success and failure paths.
 
