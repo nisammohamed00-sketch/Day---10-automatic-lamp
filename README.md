@@ -212,7 +212,7 @@ Unknown Product
 
 The function separates errors into four categories:
 
-![reference image](/screenshot/picture.jpq)
+![reference image](/Screenshot%20.png/picture.jpq)
 
 
 Error type	Example	HTTP status	Handling approach
@@ -270,10 +270,11 @@ print(lambda_handler(request, None))
 PY
 ```
 
-Testing
+**Testing**
+
 A simple test suite can verify both success and failure paths.
 
-
+```python
 # tests/test_app.py
 
 import json
@@ -321,66 +322,84 @@ def test_unknown_product():
     )
 
     assert result["statusCode"] == 404
+```
+
 Run the tests with:
 
-
+```python
 pytest
-Deployment Example: AWS Lambda
+```
+
+**Deployment Example: AWS Lambda**
+
 The handler is named lambda_handler in app.py, so the AWS Lambda handler value should be:
 
-
+```phython
 app.lambda_handler
+```
+
 A typical deployment flow is:
 
-Create a Lambda function using a supported Python runtime.
-Upload app.py and any dependencies.
-Configure an API Gateway HTTP endpoint.
-Set the integration target to the Lambda function.
-Configure logging and monitoring.
-Test successful requests and each expected error path.
-Add alarms for repeated 5xx responses and function errors.
+* Create a Lambda function using a supported Python runtime.
+* Upload app.py and any dependencies.
+* Configure an API Gateway HTTP endpoint.
+* Set the integration target to the Lambda function.
+* Configure logging and monitoring.
+* Test successful requests and each expected error path.
+* Add alarms for repeated 5xx responses and function errors.
+
 For a packaged deployment, create a ZIP archive containing the function and dependencies:
 
-
+```phyton
 mkdir package
 pip install -r requirements.txt -t package/
 cp app.py package/
 cd package
 zip -r ../function.zip .
-Upload function.zip to the function deployment configuration.
+```
+
+Upload ```function.zip ```to the function deployment configuration.
 
 The exact deployment command depends on the cloud provider, permissions model, region, runtime, and infrastructure tool used by your project.
 
-Production Considerations
+**Production Considerations**
+
 Input Validation
+
 Validate all external input at the function boundary. Never assume that a client, API gateway, or upstream service has already validated the request.
 
-Observability
+**Observability**
+
 Capture:
 
-Request correlation IDs
-Function duration
-Error counts
-Cold-start or initialization failures
-Downstream service failures
-Avoid logging sensitive customer data or authentication credentials.
 
-Retry Safety
+* Request correlation IDs
+* Function duration
+* Error counts
+* Cold-start or initialization failures
+* Downstream service failures
+* Avoid logging sensitive customer data or authentication credentials.
+
+**Retry Safety**
+
 If the platform retries a failed invocation, the function should not create duplicate orders. Use an idempotency key or persistent request ID when the operation has side effects.
 
-Timeouts
+**Timeouts**
+
 Set function and downstream service timeouts deliberately. A timeout should produce a controlled error and should not leave resources or transactions in an inconsistent state.
 
-Configuration
+**Configuration**
+
 Store environment-specific values such as catalog URLs, database credentials, and API keys in environment variables or a managed secrets service rather than hard-coding them.
 
-Summary
+**Summary**
+
 This example shows how a deployed function can:
 
-Process a real business use case.
-Validate input before performing business logic.
-Handle expected exceptions explicitly.
-Protect clients from internal error details.
-Log unexpected failures for diagnosis.
-Return predictable HTTP-style responses.
-Be tested and deployed as a serverless function.
+* Process a real business use case.
+* Validate input before performing business logic.
+* Handle expected exceptions explicitly.
+* Protect clients from internal error details.
+* Log unexpected failures for diagnosis.
+* Return predictable HTTP-style responses.
+* Be tested and deployed as a serverless function.
