@@ -1,0 +1,177 @@
+{
+	"components": [
+		{
+			"id": "default",
+			"owners": [],
+			"repositories": [
+				{
+					"role": "primary",
+					"root": "."
+				}
+			],
+			"sentry": []
+		}
+	],
+	"decisions": [],
+	"entities": [
+		{
+			"id": "agent-role.global",
+			"name": "global agent",
+			"sources": [],
+			"status": "confirmed",
+			"type": "agent_role"
+		},
+		{
+			"id": "agent-role.qaa",
+			"name": "qaa agent",
+			"sources": [],
+			"status": "confirmed",
+			"type": "agent_role"
+		},
+		{
+			"id": "agent-role.task",
+			"name": "task agent",
+			"sources": [],
+			"status": "confirmed",
+			"type": "agent_role"
+		},
+		{
+			"id": "agent-role.triage",
+			"name": "triage agent",
+			"sources": [],
+			"status": "confirmed",
+			"type": "agent_role"
+		},
+		{
+			"id": "agent-role.utility",
+			"name": "utility agent",
+			"sources": [],
+			"status": "confirmed",
+			"type": "agent_role"
+		},
+		{
+			"id": "project.day-10-automatic-lamp",
+			"name": "Day---10-automatic-lamp",
+			"sources": [
+				{
+					"checksum": "cfbec72349f8d47c259d7c8f4b779fa2744b42fea070462195f584681fcabd5d",
+					"id": "source.repository-manifest.5e2cfdc9ee95bb76",
+					"kind": "repository_manifest",
+					"locator": "."
+				}
+			],
+			"status": "confirmed",
+			"type": "project"
+		},
+		{
+			"attributes": {
+				"role": "primary",
+				"root": "."
+			},
+			"id": "repo.primary",
+			"name": "Day---10-automatic-lamp",
+			"sources": [
+				{
+					"checksum": "cfbec72349f8d47c259d7c8f4b779fa2744b42fea070462195f584681fcabd5d",
+					"id": "source.repository-manifest.5e2cfdc9ee95bb76",
+					"kind": "repository_manifest",
+					"locator": "."
+				}
+			],
+			"status": "confirmed",
+			"type": "repository"
+		}
+	],
+	"facts": [],
+	"policies": [
+		{
+			"actions": [
+				"heart.read",
+				"heart.ingest",
+				"heart.propose",
+				"heart.sync_code",
+				"problem.ingest",
+				"problem.triage_redacted"
+			],
+			"effect": "autonomous",
+			"id": "allow-safe-internal-actions",
+			"reason": "Safe reads, ingestion, deterministic synchronization, candidates, and redacted triage may run locally.",
+			"status": "confirmed"
+		},
+		{
+			"actions": [
+				"heart.approve",
+				"heart.reject",
+				"heart.edit",
+				"heart.resolve_conflict",
+				"heart.record_decision",
+				"agent.*",
+				"task.*",
+				"workspace.*",
+				"git.*",
+				"review.*",
+				"workflow.*",
+				"external.*",
+				"configuration.*",
+				"problem.investigate",
+				"problem.merge",
+				"problem.resolve",
+				"problem.suppress",
+				"problem.unmerge",
+				"problem.unsuppress"
+			],
+			"effect": "approval_required",
+			"id": "require-human-approval-for-mutations",
+			"reason": "Project and external mutations require an explicit human approval.",
+			"status": "confirmed"
+		},
+		{
+			"actions": [
+				"deploy.production",
+				"product.modify.autonomous",
+				"secret.export"
+			],
+			"effect": "forbidden",
+			"id": "forbid-dangerous-autonomy",
+			"reason": "Production deployment, autonomous product mutation, and secret export are forbidden.",
+			"status": "confirmed"
+		}
+	],
+	"projectId": "Day---10-automatic-lamp",
+	"relations": [
+		{
+			"confidence": 1,
+			"fromEntityId": "repo.primary",
+			"id": "relation.repo-primary.project",
+			"predicate": "belongs_to",
+			"sources": [
+				{
+					"checksum": "cfbec72349f8d47c259d7c8f4b779fa2744b42fea070462195f584681fcabd5d",
+					"id": "source.repository-manifest.5e2cfdc9ee95bb76",
+					"kind": "repository_manifest",
+					"locator": "."
+				}
+			],
+			"status": "confirmed",
+			"toEntityId": "project.day-10-automatic-lamp"
+		}
+	],
+	"releaseRules": [],
+	"schemaVersion": 2,
+	"trustedSources": [
+		{
+			"id": "trusted.primary-manifests",
+			"include": [
+				"package.json",
+				"go.mod",
+				"Cargo.toml",
+				"CMakeLists.txt",
+				"build.gradle",
+				"settings.gradle"
+			],
+			"kind": "repository_manifest",
+			"mode": "candidate_only",
+			"reference": "."
+		}
+	]
+}
